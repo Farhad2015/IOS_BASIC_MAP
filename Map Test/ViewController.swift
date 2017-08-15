@@ -29,7 +29,30 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let region: MKCoordinateRegion = MKCoordinateRegion(center: location, span: span)
         
         firstMap.setRegion(region, animated: true)
+        
+        let annotation = MKPointAnnotation()
+        
+        annotation.title = "My place"
+        annotation.subtitle = "This is a test subtitle"
+        annotation.coordinate = location
     
+        firstMap.addAnnotation(annotation)
+        
+        let uilpgr = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.longPressed(gestureRecognized:)))
+        uilpgr.minimumPressDuration = 2
+        
+        firstMap.addGestureRecognizer(uilpgr)
+    }
+    
+    func longPressed(gestureRecognized: UIGestureRecognizer){
+        let touchPoint = gestureRecognized.location(in: self.firstMap)
+        let coordinate = firstMap.convert(touchPoint, toCoordinateFrom: self.firstMap)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = "New Place"
+        annotation.subtitle = "New place new subtitle"
+        firstMap.addAnnotation(annotation)
     }
 
     override func didReceiveMemoryWarning() {
